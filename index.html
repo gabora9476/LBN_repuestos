@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <title>LBN Inversiones C.A. | Repuestos & Lubricantes</title>
-    <link rel="icon" type="image/png" href="https://i.ibb.co/vCxjdvLx/favicon.png">
+    <link rel="icon" type="image/png" href="https://i.ibb.co/TDKK91p1/BT.png">
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -47,7 +47,7 @@
         /* LOADING */
         #loadScreen { position:fixed; inset:0; background:#060608; z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; transition:opacity .5s }
         #loadScreen.hide { opacity:0; pointer-events:none }
-        .load-logo-img { width:260px; height:auto; filter:drop-shadow(0 0 20px rgba(200,34,255,.6)); animation:logoPulse 2s ease-in-out infinite }
+        .load-logo-img { width:180px; filter:drop-shadow(0 0 20px rgba(200,34,255,.6)); animation:logoPulse 2s ease-in-out infinite }
         @keyframes logoPulse { 0%,100%{filter:drop-shadow(0 0 20px rgba(200,34,255,.6))} 50%{filter:drop-shadow(0 0 35px rgba(200,34,255,1))} }
         .load-sub { font-size:10px; color:var(--pur); letter-spacing:5px; text-transform:uppercase; margin-top:4px }
         .load-bar { width:180px; height:2px; background:#1e1e1e; border-radius:2px; overflow:hidden; margin-top:12px }
@@ -58,7 +58,7 @@
         header { position:sticky; top:0; z-index:100; background:rgba(10,10,10,.97); border-bottom:1px solid #1e1e1e; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; backdrop-filter:blur(20px); transition:background .3s }
         .light-mode header { background:rgba(242,240,245,.97) }
         .logo-wrap { cursor:pointer; user-select:none; display:flex; align-items:center; gap:10px }
-        .logo-wrap img { height:36px; width:auto; filter:drop-shadow(0 0 8px rgba(200,34,255,.5)) }
+        .logo-wrap img { height:44px; width:auto; filter:drop-shadow(0 0 8px rgba(200,34,255,.5)) }
         .logo-sub-txt { font-size:9px; color:var(--pur); letter-spacing:3px; text-transform:uppercase; display:block; margin-top:2px }
         .hdr-r { display:flex; gap:8px; align-items:center }
         .hbtn { width:38px; height:38px; border:1px solid #252525; border-radius:10px; background:#161616; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; transition:.2s }
@@ -244,7 +244,7 @@
 
         /* ABOUT */
         .about-hero { padding:40px 20px 20px; text-align:center; position:relative }
-        .about-logo { width:260px; margin:0 auto 16px; filter:drop-shadow(0 0 16px rgba(200,34,255,.5)) }
+        .about-logo { width:180px; margin:0 auto 16px; filter:drop-shadow(0 0 16px rgba(200,34,255,.5)) }
         .about-hero p { font-size:14px; color:#888; line-height:1.8; margin-top:15px }
         .about-sec { padding:0 20px 30px }
         .about-sec h3 { font-size:11px; font-weight:700; color:var(--pur); margin-bottom:10px; padding-top:20px; border-top:1px solid #1a1a1a; letter-spacing:2px; text-transform:uppercase }
@@ -322,7 +322,7 @@
 
 <!-- LOADING -->
 <div id="loadScreen">
-    <img class="load-logo-img" src="https://i.ibb.co/TDKK91p1/BT.png" alt="LBN" onerror="this.style.display='none';document.getElementById('loadText').style.display='block'">
+    <img class="load-logo-img" src="https://i.ibb.co/vxnFymn/LBN-logo.png" alt="LBN" onerror="this.style.display='none';document.getElementById('loadText').style.display='block'">
     <div id="loadText" style="display:none;font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:900;background:linear-gradient(90deg,#8b1fc0,#c822ff,#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px">LBN</div>
     <div class="load-sub">Inversiones C.A. · Repuestos & Lubricantes</div>
     <div class="load-bar"><div class="load-fill" id="loadFill"></div></div>
@@ -338,7 +338,7 @@
 
     <header>
         <div class="logo-wrap" id="logoBtn">
-            <img src="https://i.ibb.co/TDKK91p1/BT.png" alt="LBN Inversiones"
+            <img src="https://i.ibb.co/vxnFymn/LBN-logo.png" alt="LBN Inversiones"
                  onerror="this.outerHTML='<span style=\'font-family:Barlow Condensed,sans-serif;font-size:26px;font-weight:900;background:linear-gradient(90deg,#8b1fc0,#c822ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px\'>LBN</span>'">
             <span class="logo-sub-txt">Repuestos & Lubricantes</span>
         </div>
@@ -364,7 +364,7 @@
                     <img class="bslide-bg" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=30" alt="">
                     <div class="bslide-accent"></div>
                     <div class="bslide-txt">
-                        <span class="stag">Ofertas 2025</span>
+                        <span class="stag">Ofertas 2026</span>
                         <h2>ACEITES & LUBRICANTES</h2>
                         <p>Mobil · Castrol · Valvoline · Shell</p>
                     </div>
@@ -434,7 +434,7 @@
         <div class="grid" id="prodGrid"></div>
 
         <footer>
-            <p>© 2025 LBN Inversiones C.A. · Todos los derechos reservados<br>
+            <p>© 2026 LBN Inversiones C.A. · Todos los derechos reservados<br>
             <a href="https://wa.me/584241754818">+58 424 175 4818</a> · Venezuela<br>
             <a href="https://instagram.com/lbn_repuestos" style="color:var(--pur)">@lbn_repuestos</a></p>
         </footer>
@@ -443,7 +443,7 @@
     <!-- ABOUT PAGE -->
     <div class="page" id="page-about">
         <div class="about-hero">
-            <img class="about-logo" src="https://i.ibb.co/TDKK91p1/BT.png" alt="LBN"
+            <img class="about-logo" src="https://i.ibb.co/vxnFymn/LBN-logo.png" alt="LBN"
                  onerror="this.outerHTML='<div style=\'font-family:Barlow Condensed,sans-serif;font-size:64px;font-weight:900;background:linear-gradient(90deg,#8b1fc0,#c822ff,#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;text-align:center\'>LBN</div>'">
             <p>Somos tu aliado confiable en repuestos automotrices, aceites y lubricantes. Atendemos vehículos livianos, motos y camiones de todas las marcas, con repuestos originales y alternativos de primera calidad.</p>
         </div>
@@ -484,7 +484,7 @@
             </div>
         </div>
         <footer>
-            <p>© 2025 LBN Inversiones C.A. · Venezuela<br>
+            <p>© 2026 LBN Inversiones C.A. · Venezuela<br>
             Repuestos · Aceites · Lubricantes</p>
         </footer>
     </div>
@@ -678,7 +678,7 @@
 // ═══════════════════════════════════════
 //  CONFIGURACIÓN
 // ═══════════════════════════════════════
-const ADMIN_PASS = 'lbn2025';
+const ADMIN_PASS = 'lbn2026';
 const ADMIN_WA   = '584241754818';
 
 const BIN_ID   = '69fe877eadc21f119a737aac';
