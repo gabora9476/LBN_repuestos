@@ -681,10 +681,10 @@
 const ADMIN_PASS = 'lbn2026';
 const ADMIN_WA   = '584143726732';
 
-const BIN_ID   = '69fe877eadc21f119a737aac';
-const BIN_KEY  = '$2a$10$BHNFFV8jxDgvi0gw16Wc7OjedzrlCHMo5hAh2z9e.SV5uFUaUB2uW';
-const BIN_URL  = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-const BIN_HDRS = { 'Content-Type':'application/json', 'X-Master-Key':BIN_KEY, 'X-Bin-Versioning':'false' };
+const SUPABASE_URL      = 'https://aunerraokaeipbzqfdcj.supabase.co/rest/v1/';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1bmVycmFva2FlaXBienFmZGNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4NDM3MzksImV4cCI6MjA5ODQxOTczOX0.aoea6pnwiVwlSHpiMA_eVjtJdWt5n9PYgdxmjdCf__8';
+const SB_TABLE = 'lbn_store_data';
+const SB_HDRS  = { 'Content-Type':'application/json', 'apikey':SUPABASE_ANON_KEY, 'Authorization':`Bearer ${SUPABASE_ANON_KEY}` };
 
 const IMGBB_KEY = '72f3a5d98ab82e4d79ff4af786455ec9';
 
@@ -761,10 +761,10 @@ const UNSYNCED_KEY = 'lbn_unsynced';
 async function loadFromCloud() {
     try {
         setLoadProgress(20, 'Cargando catálogo...');
-        const res = await fetch(BIN_URL + '/latest', { headers:{'X-Master-Key':BIN_KEY}, cache:'no-store' });
+        const res = await fetch(`${SUPABASE_URL}${SB_TABLE}?id=eq.1&select=products,orders`, { headers:SB_HDRS, cache:'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        const json = await res.json();
-        const data = json.record || {};
+        const rows = await res.json();
+        const data = rows[0] || {};
         const cloudProducts = Array.isArray(data.products) ? data.products : [];
         const cloudOrders   = Array.isArray(data.orders)   ? data.orders   : [];
         const hayPendiente  = localStorage.getItem(UNSYNCED_KEY) === '1';
@@ -813,7 +813,7 @@ async function saveToCloud() {
 
     for (let i = 1; i <= maxIntentos && !guardado; i++) {
         try {
-            const res = await fetch(BIN_URL, { method:'PUT', headers:BIN_HDRS, body:JSON.stringify({products, orders}), cache:'no-store' });
+            const res = await fetch(`${SUPABASE_URL}${SB_TABLE}?on_conflict=id`, { method:'POST', headers:{...SB_HDRS, 'Prefer':'resolution=merge-duplicates,return=minimal'}, body:JSON.stringify({id:1, products, orders, updated_at:new Date().toISOString()}), cache:'no-store' });
             if (!res.ok) {
                 const detalle = await res.text().catch(()=>'');
                 throw new Error('HTTP ' + res.status + (detalle ? ' — ' + detalle : ''));
