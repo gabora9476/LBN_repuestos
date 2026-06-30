@@ -435,7 +435,7 @@
 
         <footer>
             <p>© 2026 LBN Inversiones C.A. · Todos los derechos reservados<br>
-            <a href="https://wa.me/584241754818">+58 424 175 4818</a> · Venezuela<br>
+            <a href="https://wa.me/584143726732">+58 414 372 6732</a> · Venezuela<br>
             <a href="https://instagram.com/lbn_repuestos" style="color:var(--pur)">@lbn_repuestos</a></p>
         </footer>
     </div>
@@ -459,7 +459,7 @@
             📦 Envíos a todo el país</p>
 
             <h3>Contacto</h3>
-            <p><a href="https://wa.me/584241754818" style="color:var(--pur)">+58 424 175 4818</a> · WhatsApp / Llamadas · Venezuela</p>
+            <p><a href="https://wa.me/584143726732" style="color:var(--pur)">+58 414 372 6732</a> · WhatsApp / Llamadas · Venezuela</p>
 
             <h3>Redes Sociales</h3>
             <div class="social-row">
@@ -475,11 +475,11 @@
                     </div>
                     <div class="s-chip-info"><span class="s-chip-net">TikTok</span><span class="s-chip-handle">@lbn_repuestos</span></div>
                 </a>
-                <a class="s-chip" href="https://wa.me/584241754818" target="_blank" rel="noopener">
+                <a class="s-chip" href="https://wa.me/584143726732" target="_blank" rel="noopener">
                     <div class="s-chip-icon wa">
                         <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     </div>
-                    <div class="s-chip-info"><span class="s-chip-net">WhatsApp</span><span class="s-chip-handle">+58 424 175 4818</span></div>
+                    <div class="s-chip-info"><span class="s-chip-net">WhatsApp</span><span class="s-chip-handle">+58 414 372 6732</span></div>
                 </a>
             </div>
         </div>
@@ -679,12 +679,12 @@
 //  CONFIGURACIÓN
 // ═══════════════════════════════════════
 const ADMIN_PASS = 'lbn2026';
-const ADMIN_WA   = '584241754818';
+const ADMIN_WA   = '584143726732';
 
 const BIN_ID   = '69fe877eadc21f119a737aac';
 const BIN_KEY  = '$2a$10$BHNFFV8jxDgvi0gw16Wc7OjedzrlCHMo5hAh2z9e.SV5uFUaUB2uW';
 const BIN_URL  = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-const BIN_HDRS = { 'Content-Type':'application/json', 'X-Master-Key':BIN_KEY };
+const BIN_HDRS = { 'Content-Type':'application/json', 'X-Master-Key':BIN_KEY, 'X-Bin-Versioning':'false' };
 
 const IMGBB_KEY = '72f3a5d98ab82e4d79ff4af786455ec9';
 
@@ -756,20 +756,39 @@ function fmtP(p) { return '$' + parseFloat(p).toFixed(2) }
 // ═══════════════════════════════════════
 //  CLOUD / STORAGE
 // ═══════════════════════════════════════
+const UNSYNCED_KEY = 'lbn_unsynced';
+
 async function loadFromCloud() {
     try {
         setLoadProgress(20, 'Cargando catálogo...');
-        const res = await fetch(BIN_URL + '/latest', { headers:{'X-Master-Key':BIN_KEY} });
+        const res = await fetch(BIN_URL + '/latest', { headers:{'X-Master-Key':BIN_KEY}, cache:'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const json = await res.json();
         const data = json.record || {};
-        products = Array.isArray(data.products) ? data.products : [];
-        orders   = Array.isArray(data.orders)   ? data.orders   : [];
+        const cloudProducts = Array.isArray(data.products) ? data.products : [];
+        const cloudOrders   = Array.isArray(data.orders)   ? data.orders   : [];
+        const hayPendiente  = localStorage.getItem(UNSYNCED_KEY) === '1';
+
+        if (hayPendiente) {
+            // Quedó un guardado anterior sin confirmar en la nube (ej: se perdió la
+            // conexión o el servidor rechazó el envío). No se descarta: se usan los
+            // datos locales, que son los más recientes, y se reintenta sincronizarlos.
+            const lp = localStorage.getItem('lbn_prods');
+            const lo = localStorage.getItem('lbn_orders');
+            products = lp ? JSON.parse(lp) : cloudProducts;
+            orders   = lo ? JSON.parse(lo) : cloudOrders;
+        } else {
+            products = cloudProducts;
+            orders   = cloudOrders;
+        }
+
         products = products.map(p => { if(!p.imgs && p.img) p.imgs=[p.img]; if(!p.imgs) p.imgs=[]; return p; });
         setLoadProgress(80, 'Preparando catálogo...');
-        setSyncDot('synced');
+
+        if (hayPendiente) saveToCloud(); else setSyncDot('synced');
         return true;
     } catch(e) {
+        console.error('No se pudo cargar el catálogo desde la nube:', e);
         const lp = localStorage.getItem('lbn_prods');
         const lo = localStorage.getItem('lbn_orders');
         products = lp ? JSON.parse(lp) : [];
@@ -786,17 +805,49 @@ async function saveToCloud() {
     setSyncDot('syncing');
     localStorage.setItem('lbn_prods',  JSON.stringify(products));
     localStorage.setItem('lbn_orders', JSON.stringify(orders));
-    try {
-        await fetch(BIN_URL, { method:'PUT', headers:BIN_HDRS, body:JSON.stringify({products, orders}) });
-        setSyncDot('synced');
-    } catch(e) { setSyncDot('error') }
-    finally {
-        isSaving = false;
-        if (pendingSave) { pendingSave = false; saveToCloud(); }
+    localStorage.setItem(UNSYNCED_KEY, '1');
+
+    const maxIntentos = 3;
+    let guardado = false;
+    let ultimoError = null;
+
+    for (let i = 1; i <= maxIntentos && !guardado; i++) {
+        try {
+            const res = await fetch(BIN_URL, { method:'PUT', headers:BIN_HDRS, body:JSON.stringify({products, orders}), cache:'no-store' });
+            if (!res.ok) {
+                const detalle = await res.text().catch(()=>'');
+                throw new Error('HTTP ' + res.status + (detalle ? ' — ' + detalle : ''));
+            }
+            guardado = true;
+        } catch(e) {
+            ultimoError = e;
+            if (i < maxIntentos) await new Promise(r => setTimeout(r, 800 * i));
+        }
     }
+
+    if (guardado) {
+        localStorage.removeItem(UNSYNCED_KEY);
+        setSyncDot('synced');
+    } else {
+        console.error('No se pudo guardar en la nube tras varios intentos:', ultimoError);
+        setSyncDot('error');
+        showToast('No se pudo sincronizar con el servidor, se reintentará automáticamente');
+    }
+
+    isSaving = false;
+    if (pendingSave) { pendingSave = false; saveToCloud(); }
 }
 
 function save() { saveToCloud(); }
+
+// Reintento automático en segundo plano si quedó algo sin sincronizar
+// (ej: se guardó sin conexión, o el servidor falló momentáneamente)
+setInterval(() => {
+    if (localStorage.getItem(UNSYNCED_KEY) === '1' && !isSaving) saveToCloud();
+}, 60000);
+window.addEventListener('online', () => {
+    if (localStorage.getItem(UNSYNCED_KEY) === '1' && !isSaving) saveToCloud();
+});
 
 // ═══════════════════════════════════════
 //  IMGBB UPLOAD
@@ -804,6 +855,7 @@ function save() { saveToCloud(); }
 async function uploadImgs(files) {
     const up = document.getElementById('uploadProgress');
     const preview = document.getElementById('imgbbPreview');
+    let exitosas = 0, fallidas = 0;
     for (let i = 0; i < files.length; i++) {
         up.textContent = `Subiendo ${i+1}/${files.length}...`;
         const fd = new FormData();
@@ -811,14 +863,26 @@ async function uploadImgs(files) {
         try {
             const r = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, {method:'POST', body:fd});
             const j = await r.json();
-            if (j.success) {
+            if (r.ok && j.success) {
                 const url = j.data.url;
                 uploadedImgUrls.push(url);
                 renderImgPreview(uploadedImgUrls);
+                exitosas++;
+            } else {
+                fallidas++;
+                console.error('ImgBB rechazó la imagen ' + (i+1) + ':', j);
             }
-        } catch(e) { up.textContent = 'Error al subir imagen' }
+        } catch(e) { fallidas++; console.error('Error de red subiendo imagen ' + (i+1) + ':', e); }
     }
-    up.textContent = 'Imágenes listas ✓';
+    if (fallidas === 0) {
+        up.textContent = 'Imágenes listas ✓';
+    } else if (exitosas > 0) {
+        up.textContent = `${exitosas} de ${files.length} imágenes subidas (revisa la consola)`;
+        showToast('Algunas imágenes no se pudieron subir');
+    } else {
+        up.textContent = 'No se pudo subir ninguna imagen';
+        showToast('Error al subir las imágenes, intenta de nuevo');
+    }
     const urlField = document.getElementById('p-img');
     if (uploadedImgUrls.length) urlField.value = uploadedImgUrls.join(', ');
 }
